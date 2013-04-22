@@ -1,10 +1,12 @@
 <div class="well" xmlns="http://www.w3.org/1999/html">
     <h3>Demo</h3>
     <div class="form-inline">
-        <label for="q">SPZ / VIN:</label> <input name="q" id="q" type="text" class="input-xxlarge">
+        <label for="q">SPZ / VIN:</label> <input name="q" id="q" type="text" value="8B67354" class="input-xxlarge">
         <input type="submit" id="submit" value="hledat" class="btn btn-primary">
         <br><br>
+        <p id="url"></p>
         <pre id="result">Nejprve vložte indentifikátor a stiskněte tlačítko Hledat</pre>
+
     </div>
     <p></p>
     <style>
@@ -39,14 +41,18 @@
                 });
             }
 
-          $("#submit").click(function(){
-              var query = $("#q").val();
-              $("#result").text("Načítám...");
-              $.get('/search?q=' + query, function(result) {
-                  obj = JSON.parse(result);
-                  $("#result").html(syntaxHighlight(obj));
-              });
-          });
+            $("#submit").click(function () {
+                var query = $("#q").val();
+                $("#result").text("Načítám...");
+                var url = window.location.protocol + '//' + window.location.host + '/search?q=' + query;
+                $("#url").html('API URL: <a href="' + url + '">' + url + '</a>');
+                $.get(url, function (result) {
+                    var obj = JSON.parse(result);
+                    $("#result").html(syntaxHighlight(obj));
+                }, "text").fail(function (xhr, statusText) {
+                            $("#result").text("Error: " + statusText);
+                        });
+            });
         });
     </script>
 </div>

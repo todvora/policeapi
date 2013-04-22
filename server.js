@@ -116,10 +116,18 @@ var SampleApp = function() {
                 format = "json";
             }
 
-            new policiecr.PolicieCrClient().search(q,  function (result) {
-
-                res.set('Content-Type', 'text/javascript');
-                res.send(JSON.stringify(result));
+            new policiecr.PolicieCrClient().search(q, function (result) {
+                var data = {"results": result};
+                if (format == "xml") {
+                    res.set('Content-Type', 'text/xml');
+                    var output = require('easyxml').render(data);
+                    console.log(output);
+                    res.send(output);
+                } else {
+                    res.set('Content-Type', 'text/javascript');
+                    var output = JSON.stringify(data);
+                    res.send(output);
+                }
             });
         }
 
