@@ -20,12 +20,15 @@
   },
 
   "engines": {
-    "node": ">= 0.6.0",
+    "node": ">= 0.10.4",
     "npm": ">= 1.0.0"
   },
 
   "dependencies": {
-    "express": "*"
+    "express": "*",
+    "request": "*",
+    "cheerio": "*",
+    "easyxml": "*"
   },
   "devDependencies": {},
   "bundleDependencies": [],

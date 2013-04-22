@@ -2,6 +2,7 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
+var policiecr = require('./lib/policiecr.js');
 
 
 /**
@@ -23,7 +24,7 @@ var SampleApp = function() {
     self.setupVariables = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_INTERNAL_IP;
-        self.port      = process.env.OPENSHIFT_INTERNAL_PORT || 8080;
+        self.port      = process.env.OPENSHIFT_INTERNAL_PORT || 18080;
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -33,18 +34,18 @@ var SampleApp = function() {
         };
     };
 
-
-    /**
-     *  Populate the cache.
-     */
-    self.populateCache = function() {
-        if (typeof self.zcache === "undefined") {
-            self.zcache = { 'index.html': '' };
-        }
-
-        //  Local cache for static content.
-        self.zcache['index.html'] = fs.readFileSync('./index.html');
-    };
+//
+//    /**
+//     *  Populate the cache.
+//     */
+//    self.populateCache = function() {
+//        if (typeof self.zcache === "undefined") {
+//            self.zcache = { 'index.html': '' };
+//        }
+//
+//        //  Local cache for static content.
+//        self.zcache['index.html'] = fs.readFileSync('./index.html');
+//    };
 
 
     /**
@@ -92,6 +93,14 @@ var SampleApp = function() {
     /**
      *  Create the routing table entries + handlers for the application.
      */
+
+    self.renderPage = function(page, req, res) {
+        res.set('Content-Type', 'text/html');
+        var layout = fs.readFileSync('./public/templates/layout.html', 'utf-8');
+        var pageTemplate = fs.readFileSync('./public/templates/pages/' + page + '.html', 'utf-8');
+        res.send(layout.replace("{page}", pageTemplate));
+    };
+
     self.createRoutes = function() {
         self.routes = { };
 
@@ -100,30 +109,38 @@ var SampleApp = function() {
             res.send('1');
         };
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
-
-        self.routes['/env'] = function(req, res) {
-            var content = 'Version: ' + process.version + '\n<br/>\n' +
-                          'Env: {<br/>\n<pre>';
-            //  Add env entries.
-            for (var k in process.env) {
-               content += '   ' + k + ': ' + process.env[k] + '\n';
+        self.routes['/search'] = function (req, res) {
+            var q = req.query["q"];
+            var format = req.query["format"];
+            if(typeof format === undefined) {
+                format = "json";
             }
-            content += '}\n</pre><br/>\n'
-            res.send(content);
-            res.send('<html>\n' +
-                     '  <head><title>Node.js Process Env</title></head>\n' +
-                     '  <body>\n<br/>\n' + content + '</body>\n</html>');
-        };
+
+            new policiecr.PolicieCrClient().search(q,  function (result) {
+
+                res.set('Content-Type', 'text/javascript');
+                res.send(JSON.stringify(result));
+            });
+        }
 
         self.routes['/'] = function(req, res) {
-            res.set('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
+            self.renderPage('homepage', req,res);
+        };
+
+        self.routes['/docs'] = function(req, res) {
+            self.renderPage('docs', req,res);
+        };
+
+        self.routes['/demo'] = function(req, res) {
+            self.renderPage('demo', req, res);
+        };
+
+        self.routes['/contact'] = function(req, res) {
+            self.renderPage('contact', req, res);
         };
     };
+
+
 
 
     /**
@@ -132,7 +149,9 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
+
+        self.app.use('/public', express.static(__dirname + '/public'));
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
@@ -146,7 +165,7 @@ var SampleApp = function() {
      */
     self.initialize = function() {
         self.setupVariables();
-        self.populateCache();
+//        self.populateCache();
         self.setupTerminationHandlers();
 
         // Create the express server and routes.
