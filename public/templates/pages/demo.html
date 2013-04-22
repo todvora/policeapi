@@ -1,5 +1,7 @@
 <div class="well" xmlns="http://www.w3.org/1999/html">
     <h3>Demo</h3>
+    <p>Ukázka toho, jak se můžete API dotazovat a jaká data vrací. Na výběr je ze dvou výstupních formátů - JSON a XML.<br>Není nutné nijak specifikovat, zda se jedná o VIN nebo SPZ / RZ vozidla. API si s daty poradí v každé kombinaci.</p>
+    <br>
         <div class="form-inline form-horizontal">
             <label for="q">SPZ / VIN:</label> <input name="q" id="q" type="text" value="8B67354" class="input-xxlarge">
 
@@ -14,7 +16,7 @@
         </label>
         <br>
         <p id="url"></p>
-        <pre id="result">Nejprve vložte indentifikátor a stiskněte tlačítko Hledat</pre>
+        <pre id="result" style="background-color:white">Nejprve vložte indentifikátor a stiskněte tlačítko Hledat</pre>
 
 
     <p></p>
@@ -69,7 +71,7 @@
                 var format = $('input:radio[name=format]:checked').val();
                 $("#result").text("Načítám...");
                 var url = window.location.protocol + '//' + window.location.host + '/search?q=' + query + '&format=' + format;
-                $("#url").html('API URL: <a href="' + url + '">' + url + '</a>');
+                $("#url").html('API URL, která je volána: <a href="' + url + '">' + url + '</a>');
                 $.get(url,function (result) {
                     if (format == "json") {
                         var obj = JSON.parse(result);
