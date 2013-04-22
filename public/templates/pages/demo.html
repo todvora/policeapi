@@ -1,13 +1,22 @@
 <div class="well" xmlns="http://www.w3.org/1999/html">
     <h3>Demo</h3>
-    <div class="form-inline">
-        <label for="q">SPZ / VIN:</label> <input name="q" id="q" type="text" value="8B67354" class="input-xxlarge">
-        <input type="submit" id="submit" value="hledat" class="btn btn-primary">
-        <br><br>
+        <div class="form-inline form-horizontal">
+            <label for="q">SPZ / VIN:</label> <input name="q" id="q" type="text" value="8B67354" class="input-xxlarge">
+
+            <input type="submit" id="submit" value="hledat" class="btn btn-primary">
+        </div>
+        <br>
+        <label class="radio">
+            <input type="radio" name="format" value="json" checked>JSON formát
+        </label>
+        <label class="radio">
+            <input type="radio" name="format" value="xml"> XML formát
+        </label>
+        <br>
         <p id="url"></p>
         <pre id="result">Nejprve vložte indentifikátor a stiskněte tlačítko Hledat</pre>
 
-    </div>
+
     <p></p>
     <style>
         pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
@@ -41,14 +50,33 @@
                 });
             }
 
+            var xml_special_to_escaped_one_map = {
+                '&': '&amp;',
+                '"': '&quot;',
+                '<': '&lt;',
+                '>': '&gt;'
+            };
+
+
+            function encodeXml(string) {
+                return string.replace(/([\&"<>])/g, function(str, item) {
+                    return xml_special_to_escaped_one_map[item];
+                });
+            };
+
             $("#submit").click(function () {
                 var query = $("#q").val();
+                var format = $('input:radio[name=format]:checked').val();
                 $("#result").text("Načítám...");
-                var url = window.location.protocol + '//' + window.location.host + '/search?q=' + query;
+                var url = window.location.protocol + '//' + window.location.host + '/search?q=' + query + '&format=' + format;
                 $("#url").html('API URL: <a href="' + url + '">' + url + '</a>');
-                $.get(url, function (result) {
-                    var obj = JSON.parse(result);
-                    $("#result").html(syntaxHighlight(obj));
+                $.get(url,function (result) {
+                    if (format == "json") {
+                        var obj = JSON.parse(result);
+                        $("#result").html(syntaxHighlight(obj));
+                    } else {
+                        $("#result").html(encodeXml(result));
+                    }
                 }, "text").fail(function (xhr, statusText) {
                             $("#result").text("Error: " + statusText);
                         });
