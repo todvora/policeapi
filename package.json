@@ -28,7 +28,8 @@
     "express": "*",
     "request": "*",
     "cheerio": "*",
-    "easyxml": "*"
+    "easyxml": "*",
+    "mongodb": "*"
   },
   "devDependencies": {},
   "bundleDependencies": [],

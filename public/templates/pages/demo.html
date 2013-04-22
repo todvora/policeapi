@@ -8,11 +8,13 @@
             <input type="submit" id="submit" value="hledat" class="btn btn-primary">
         </div>
         <br>
+        Poslední hledané: <span id="lastsearch"></span><br><br>
+
         <label class="radio">
-            <input type="radio" name="format" value="json" checked>JSON formát
+            <input type="radio" name="format" value="json" checked>JSON formát - vhodný pro mobilní aplikace, webové stránky
         </label>
         <label class="radio">
-            <input type="radio" name="format" value="xml"> XML formát
+            <input type="radio" name="format" value="xml"> XML formát - vhodný pro zpracování v interních systémech
         </label>
         <br>
         <p id="url"></p>
@@ -20,16 +22,23 @@
 
 
     <p></p>
-    <style>
-        pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
-        .string { color: green; }
-        .number { color: darkorange; }
-        .boolean { color: blue; }
-        .null { color: magenta; }
-        .key { color: red; }
-    </style>
     <script>
         $(document).ready(function () {
+
+            $(document).on("click", ".lastitem", function(event){
+                event.stopPropagation();
+                event.preventDefault();
+                $("#q").val($(this).text());
+            });
+            $.get('lastsearch',function (result) {
+                var obj = JSON.parse(result);
+                var output = "";
+                $.each(obj,function(index, value){
+                    output = output + '<a href="#" class="lastitem">' + value.vin+'</a>&nbsp;&nbsp;';
+                });
+                $("#lastsearch").html(output);
+            });
+
             function syntaxHighlight(json) {
                 if (typeof json != 'string') {
                      json = JSON.stringify(json, undefined, 2);

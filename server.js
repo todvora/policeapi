@@ -3,6 +3,8 @@
 var express = require('express');
 var fs      = require('fs');
 var policiecr = require('./lib/policiecr.js');
+var mongodb = require('mongodb');
+
 
 
 /**
@@ -33,6 +35,23 @@ var SampleApp = function() {
             self.ipaddress = "127.0.0.1";
         };
     };
+
+    self.initializeMongoDb = function() {
+        var mongoUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME || null;
+        var mongoPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD || null;
+        var mongoIp = process.env.OPENSHIFT_MONGODB_DB_HOST || "127.0.0.1";
+        var mongoPort = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
+
+        var server = new mongodb.Server(mongoIp, mongoPort, {});
+        self.mongoStorage = new mongodb.Db('pcr', server, {safe:false, auto_reconnect: true});
+        self.mongoStorage.open(function(){
+            if(mongoUser != null && mongoPass != null) {
+                self.mongoStorage.authenticate(mongoUser, mongoPass, function(err, res) {});
+            }
+        });
+
+    };
+
 
 //
 //    /**
@@ -109,6 +128,15 @@ var SampleApp = function() {
             res.send('1');
         };
 
+        self.routes['/lastsearch'] = function(req, res) {
+            self.mongoStorage.collection("results", function (err, collection) {
+                collection.find().limit(5).toArray(function (err, results) {
+                    res.set('Content-Type', 'text/javascript');
+                    var output = JSON.stringify(results);
+                    res.send(output);
+                });
+        })};
+
         self.routes['/search'] = function (req, res) {
             var q = req.query["q"];
             var format = req.query["format"];
@@ -117,14 +145,26 @@ var SampleApp = function() {
             }
 
             new policiecr.PolicieCrClient().search(q, function (result) {
-                var data = {"results": result};
+
+                if(typeof result.results !== "undefined") {
+                    self.mongoStorage.collection("results", function (err, collection) {
+                        result.results.forEach(function(entry) {
+                            collection.count({"vin": entry.vin},function (err, count) {
+                                if(count == 0) {
+                                    collection.insert(entry);
+                                }
+                            });
+                        });
+                    });
+                }
+
                 if (format == "xml") {
                     res.set('Content-Type', 'text/xml');
-                    var output = require('easyxml').render(data);
+                    var output = require('easyxml').render(result);
                     res.send(output);
                 } else {
                     res.set('Content-Type', 'text/javascript');
-                    var output = JSON.stringify(data);
+                    var output = JSON.stringify(result);
                     res.send(output);
                 }
             });
@@ -144,6 +184,14 @@ var SampleApp = function() {
 
         self.routes['/contact'] = function(req, res) {
             self.renderPage('contact', req, res);
+        };
+
+        self.routes['/expo'] = function(req, res) {
+            self.renderPage('expo', req, res);
+        };
+
+        self.routes['/about'] = function(req, res) {
+            self.renderPage('about', req, res);
         };
     };
 
@@ -175,8 +223,10 @@ var SampleApp = function() {
 //        self.populateCache();
         self.setupTerminationHandlers();
 
+        self.initializeMongoDb();
         // Create the express server and routes.
         self.initializeServer();
+
     };
 
 
