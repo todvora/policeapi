@@ -78,9 +78,9 @@
             $("#submit").click(function () {
                 var query = $("#q").val();
                 var format = $('input:radio[name=format]:checked').val();
-                $("#result").text("Načítám...");
-                var url = window.location.protocol + '//' + window.location.host + '/search?q=' + query + '&format=' + format;
-                $("#url").html('API URL, která je volána: <a href="' + url + '">' + url + '</a>');
+                $("#result").text("Loading...");
+                var url = window.location.protocol + '//' + window.location.host + '/search?q=' + encode(query) + '&format=' + format;
+                $("#url").html('API URL, which is used: <a href="' + url + '">' + url + '</a>');
                 $.get(url,function (result) {
                     if (format == "json") {
                         var obj = JSON.parse(result);
