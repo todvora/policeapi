@@ -1,30 +1,26 @@
 <div class="well">
-    <h3>API k policejní databázi odcizených vozidel</h3>
+    <h3>API to official Czech police database of stolen vehicles.</h3>
 
-    <p>Policie ČR neposkytuje žádné API pro dotazování na odcizená vozidla. Do konce roku 2011 poskytovali pěkné XML API. Pak jej
-        ale bez náhrady zrušili a myslí si, že všem musí stačit
-        <a href="http://aplikace.policie.cz/patrani-vozidla/default.aspx">formulář</a>
-        na jejich webu.</p>
+    <p>Czech police doesn't understand the concept of open data. They does not offer any
+        API to search and verify vehicle identificators. They had one API, but at end of 2011 removed it
+        without replacement. So i decided to create API based od official web search located on <a href="http://aplikace.policie.cz/patrani-vozidla/default.aspx">police
+            website</a>.</p>
 
-    <p>Když jsem se ptal proč, dostalo se mi odpovědi:</p>
-    <blockquote>"Vaše automatické zpracování dat v systémech je zbytečné, pokud tu nejaktuálnější verzi databáze máte na našich stránkách on line."</blockquote>
+    <p>When I asked, why there is no API, I got response (translated):</p>
+    <blockquote>"Your automatic processing is useless, if you can find current data on our web page online."</blockquote>
 
-    <p>Policie zřejmě vůbec nechápe, že bylo možné ihned ověřovat odcizenost vozidla všude tam, kde se pracuje s SPZ / RZ nebo VIN. Netuší, k čemu
-        jsou API a jak mají vypadat dostupná data. Celý příběh si můžete přečíst na <a href="http://www.odcizena-vozidla.cz/ukonceni-importu-policie">odcizena-vozidla.cz</a>.</p>
+    <p>So I do exactly what they said. I'm searching data on their website and provide them in JSON or XML.</p>
 
-    <p>Pokud si myslíte, stejně jako já, že by informace o odcizeném vozidle měla být co nejsnáz dostupná, pak jste tu dobře.
-        Vytvořil jsem jednoduché API postavené nad oficiální webovým
-        formulářem, které vám zpříjemní vyhledávání a ověřování odcizených vozidel. Nemusíte tak sami parsovat ošklivé HTML a starat
-        se o aktualizaci scriptů v okamžiku, kdy policie změní strukturu webu.</p>
-    <p><strong>Každým vyhledáváním pomáháte</strong>. Nejen, že zjistíte, zda je vozidlo hledané.
-        Každým dotazem pomáháte zpřístupnit část policejní databáze vyhledavačům. Pro roboty
-        je web policie neprůchozí - to je špatně. Když se ale kdekoliv na internetu objeví odkaz na detail vozidla
-        v policejní databázi, rázem o stránce budou vědět všechny vyhledavače (seznam, google, bing,...) a mohou
-        ji zahrnout do výsledků vyhledávání.
+    <p>Police doesn't understand, that it can be possible to verify vehicles in real time in our systems.
+    Everywhere, where you process any identificators of vehicles, you can check, if it's not stolen.
+    They don't know, what API is and why is useful. <br>All the details of my communication with Czech police is
+        <a href="http://www.odcizena-vozidla.cz/ukonceni-importu-policie">here</a> (Czech lang).
     </p>
-    <p>
-        <a href="/demo" class="btn btn-primary btn-large">
-            Spustit demo
-        </a>
-    </p>
+    <p>Now you can take advantage of this API. Make something useful. Something that can help. Show, that we are able to
+    use this data. Informations should be spread, not to be locked inaccessible.</p>
+
+    <div class="btn-group">
+        <a href="/demo" class="btn btn-primary btn-large">Run DEMO</a><a href="/docs" class="btn btn-large">Show docs</a>
+        </div>
+
 </div>

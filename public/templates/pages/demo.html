@@ -1,24 +1,26 @@
 <div class="well" xmlns="http://www.w3.org/1999/html">
     <h3>Demo</h3>
-    <p>Ukázka toho, jak se můžete API dotazovat a jaká data vrací. Na výběr je ze dvou výstupních formátů - JSON a XML.<br>Není nutné nijak specifikovat, zda se jedná o VIN nebo SPZ / RZ vozidla. API si s daty poradí v každé kombinaci.</p>
+    <p>API demo. Try to put registration number / VIN or select one of last used (below input).
+        There are two formats of results - JSON a XML.<br>No need to specify, if input is registration number or VIN. API can
+        handle both combinations. Complete API documentation can be found on <a target="_blank" href="http://docs.odcizenavozidla.apiary.io">docs.odcizenavozidla.apiary.io</a></p>
     <br>
         <div class="form-inline form-horizontal">
-            <label for="q">SPZ / VIN:</label> <input name="q" id="q" type="text" value="8B67354" class="input-xxlarge">
+            <label for="q">Reg.num / VIN:</label> <input name="q" id="q" type="text" value="8B67354" class="input-xxlarge">
 
-            <input type="submit" id="submit" value="hledat" class="btn btn-primary">
+            <input type="submit" id="submit" value="Search" class="btn btn-primary">
         </div>
         <br>
-        Poslední hledané: <span id="lastsearch"></span><br><br>
+        Last searched: <span id="lastsearch"></span><br><br>
 
         <label class="radio">
-            <input type="radio" name="format" value="json" checked>JSON formát - vhodný pro mobilní aplikace, webové stránky
+            <input type="radio" name="format" value="json" checked>JSON format - good for mobile apps, web pages
         </label>
         <label class="radio">
-            <input type="radio" name="format" value="xml"> XML formát - vhodný pro zpracování v interních systémech
+            <input type="radio" name="format" value="xml"> XML format - good for your internal systems, backend development
         </label>
         <br>
         <p id="url"></p>
-        <pre id="result" style="background-color:white">Nejprve vložte indentifikátor a stiskněte tlačítko Hledat</pre>
+        <pre id="result" style="background-color:white">First insert identificator and press Search button.</pre>
 
 
     <p></p>
