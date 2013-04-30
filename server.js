@@ -170,28 +170,17 @@ var SampleApp = function() {
             });
         }
 
-        self.routes['/'] = function(req, res) {
-            self.renderPage('homepage', req,res);
-        };
+        var pages = ["docs", "demo", "contact", "expo", "about", "moredata"];
 
-        self.routes['/docs'] = function(req, res) {
-            self.renderPage('docs', req,res);
-        };
+        pages.forEach(function (entry) {
+            self.routes['/' + entry] = function (req, res) {
+                self.renderPage(entry, req, res);
+            };
+        });
 
-        self.routes['/demo'] = function(req, res) {
-            self.renderPage('demo', req, res);
-        };
-
-        self.routes['/contact'] = function(req, res) {
-            self.renderPage('contact', req, res);
-        };
-
-        self.routes['/expo'] = function(req, res) {
-            self.renderPage('expo', req, res);
-        };
-
-        self.routes['/about'] = function(req, res) {
-            self.renderPage('about', req, res);
+        // special, homepage mapped to /
+        self.routes['/'] = function (req, res) {
+            self.renderPage('homepage', req, res);
         };
     };
 
