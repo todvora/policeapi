@@ -160,7 +160,8 @@ var SampleApp = function() {
 
                 if (format == "xml") {
                     res.set('Content-Type', 'text/xml');
-                    var output = require('easyxml').render(result);
+                    var output = '<?xml version="1.0" encoding="UTF-8"?>';
+                    output = output + '\n' + require('easyxml').render(result);
                     res.send(output);
                 } else {
                     res.set('Content-Type', 'text/javascript');
