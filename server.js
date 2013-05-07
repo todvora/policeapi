@@ -4,6 +4,7 @@ var express = require('express');
 var fs      = require('fs');
 var policiecr = require('./lib/policiecr.js');
 var mongodb = require('mongodb');
+var mustache = require('mustache');
 
 
 
@@ -113,10 +114,16 @@ var SampleApp = function() {
      *  Create the routing table entries + handlers for the application.
      */
 
-    self.renderPage = function(page, req, res) {
+    self.renderPage = function(page, req, res, data) {
+
         res.set('Content-Type', 'text/html');
         var layout = fs.readFileSync('./public/templates/layout.html', 'utf-8');
         var pageTemplate = fs.readFileSync('./public/templates/pages/' + page + '.html', 'utf-8');
+
+        if(typeof data !== 'undefined') {
+            pageTemplate = mustache.to_html(pageTemplate, data);
+        }
+
         res.send(layout.replace("{page}", pageTemplate));
     };
 
@@ -128,14 +135,36 @@ var SampleApp = function() {
             res.send('1');
         };
 
-        self.routes['/lastsearch'] = function(req, res) {
+        self.routes['/list'] = function (req, res) {
+            var page = req.query["page"];
+            if(typeof page === "undefined") {
+                page = 1;
+            }
+            var limit = 200; // entries per page
+            page = page -1;
+            var skip = page * limit;
+
+            self.mongoStorage.collection("results", function (err, collection) {
+                collection.count(function (err, count) {
+                    collection.find().limit(limit).toArray(function (err, results) {
+                        var data = {};
+                        data['total'] = Math.min(limit, count);
+                        data['results'] = results;
+                        self.renderPage("list", req, res, data);
+                    });
+                });
+            });
+        };
+
+        self.routes['/lastsearch'] = function (req, res) {
             self.mongoStorage.collection("results", function (err, collection) {
                 collection.find().limit(5).toArray(function (err, results) {
                     res.set('Content-Type', 'text/javascript');
                     var output = JSON.stringify(results);
                     res.send(output);
                 });
-        })};
+            })
+        };
 
         self.routes['/search'] = function (req, res) {
             var q = req.query["q"];
@@ -171,7 +200,7 @@ var SampleApp = function() {
             });
         }
 
-        var pages = ["docs", "demo", "contact", "expo", "about", "moredata"];
+        var pages = ["docs", "contact", "expo", "about", "moredata"];
 
         pages.forEach(function (entry) {
             self.routes['/' + entry] = function (req, res) {
@@ -182,6 +211,12 @@ var SampleApp = function() {
         // special, homepage mapped to /
         self.routes['/'] = function (req, res) {
             self.renderPage('homepage', req, res);
+        };
+
+        self.routes['/demo'] = function (req, res) {
+            var q = req.query["q"];
+
+            self.renderPage('demo', req, res, {'query': q});
         };
     };
 

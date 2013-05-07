@@ -1,7 +1,7 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "Unofficial Czech Police API",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "Unofficial API to the official Czech police database of stolen vehicles",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -9,9 +9,9 @@
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url":  "http://openshift.redhat.com/"
+    "name": "Tomas Dvorak",
+    "email": "todvora@gmail.com",
+    "url":  "http://www.tomas-dvorak/"
   },
   "homepage": "http://openshift.redhat.com/",
   "repository": {
@@ -29,7 +29,8 @@
     "request": "*",
     "cheerio": "*",
     "easyxml": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "mustache": "*"
   },
   "devDependencies": {},
   "bundleDependencies": [],
