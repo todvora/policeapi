@@ -146,7 +146,8 @@ var SampleApp = function() {
 
             self.mongoStorage.collection("results", function (err, collection) {
                 collection.count(function (err, count) {
-                    collection.find().limit(limit).toArray(function (err, results) {
+                    // sort by create time desc
+                    collection.find().sort({'_id' : -1}).limit(limit).toArray(function (err, results) {
                         var data = {};
                         data['total'] = Math.min(limit, count);
                         data['results'] = results;
