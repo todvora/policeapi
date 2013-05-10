@@ -5,6 +5,7 @@ $(document).ready(function () {
         event.preventDefault();
         $("#q").val($(this).text());
     });
+
     $.get('lastsearch', function (result) {
         var obj = JSON.parse(result);
         var output = "";
@@ -56,7 +57,7 @@ $(document).ready(function () {
         });
     };
 
-    $("#submit").click(function () {
+    function processForm() {
         var query = $("#q").val();
         var format = $('input:radio[name=format]:checked').val();
         $("#result").text("Loading...");
@@ -70,7 +71,18 @@ $(document).ready(function () {
                 $("#result").html(encodeXml(result));
             }
         }, "text").fail(function (xhr, statusText) {
-                $("#result").text("Error: " + statusText);
-            });
+                    $("#result").text("Error: " + statusText);
+                });
+    };
+
+    $("#submit").click(function () {
+        processForm();
+    });
+
+    $('#q').keypress(function (e) {
+        if (e.which == 13) {
+            processForm();
+            return false;
+        }
     });
 });
