@@ -1,0 +1,83 @@
+HOST:  https://www.policeapi.cz/
+
+--- Stolen Vehicles Database API ---
+
+---
+Czech Police does not have any API for searching stolen vehicles. So i made one. 
+If you need to verify registration number or VIN of vehicle, you can use my API. 
+
+It's based on search form on oficial website [aplikace.policie.cz/patrani-vozidla](http://aplikace.policie.cz/patrani-vozidla/)  
+
+More details and demo on [www.policeapi.cz](http://www.policeapi.cz)
+---
+
+--
+Search in official Czech police database of stolen vehicles - JSON results. 
+There are used some typical abbreviations:
+
+* __rpw__ - Registration Plates of the World - country od registration, see [en.wikipedia.org/wiki/List_of_international_vehicle_registration_codes](http://en.wikipedia.org/wiki/List_of_international_vehicle_registration_codes)
+* __regno__ - Registration number - Licence plate number -[en.wikipedia.org/wiki/Vehicle_registration_plate](http://en.wikipedia.org/wiki/Vehicle_registration_plate)
+* __vin__ - Vehicle Identification Number - [en.wikipedia.org/wiki/VIN](http://en.wikipedia.org/wiki/VIN)
+* __stolendate__ - in format DD.MM.YYYY
+--
+
+Search in official Czech police database of stolen vehicles. Parameters are:
+
+* __q__ - query maybe VIN or registration number
+
+* __format__ - JSON
+GET /search?q=8B67354&format=json
+< 200
+< Content-Type: text/javascript
+{
+  "results": [
+    {
+      "class": "osobní vozidlo",
+      "manufacturer": "VW",
+      "type": "PASSAT VARIANT 3BGAWXX0SGSE WV",
+      "color": "modrá tmavá",
+      "regno": "8B67354",
+      "rpw": "CZ",
+      "vin": "WVWZZZ3BZ2E409524",
+      "engine": "",
+      "productionyear": "2002",
+      "stolendate": "13.3.2013",
+      "url": "http://aplikace.policie.cz/patrani-vozidla/Detail.aspx?id=368304"
+    }
+  ],
+  "count": 1,
+  "time": "2013-05-08T10:17:25.997Z"
+}
+
+--
+Search in official Czech police database of stolen vehicles - XML results. 
+--
+
+Search in official Czech police database of stolen vehicles. Parameters are:
+
+* __q__ - query maybe VIN or registration number
+
+* __format__ - XML
+GET /search?q=8B67354&format=xml
+< 200
+< Content-Type: text/xml
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <results>
+        <result>
+            <class>osobní vozidlo</class>
+            <manufacturer>VW</manufacturer>
+            <type>PASSAT VARIANT 3BGAWXX0SGSE WV</type>
+            <color>modrá tmavá</color>
+            <regno>8B67354</regno>
+            <rpw>CZ</rpw>
+            <vin>WVWZZZ3BZ2E409524</vin>
+            <engine />
+            <productionyear>2002</productionyear>
+            <stolendate>13.3.2013</stolendate>
+            <url>http://aplikace.policie.cz/patrani-vozidla/Detail.aspx?id=368304</url>
+        </result>
+    </results>
+    <count>1</count>
+    <time>2013-05-08T10:24:19.213Z</time>
+</response>
