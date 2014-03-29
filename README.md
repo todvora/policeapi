@@ -2,6 +2,8 @@ PoliceAPI.cz
 ====================================================================
 Unofficial API to the official Czech police database of stolen vehicles
 
+[![Build Status](https://travis-ci.org/todvora/policeapi.svg?branch=master)](https://travis-ci.org/todvora/policeapi)
+
 Czech police doesn't understand the concept of [open data](http://en.wikipedia.org/wiki/Open_data#Open_data_in_government).
 It is not offering an API to search and verify vehicle identificators anymore.
 At the end of 2011, its official API was removed without replacement.
