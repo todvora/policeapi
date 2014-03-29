@@ -14,7 +14,6 @@ describe('jasmine-node', function () {
         };
         var nullparam = function () {
             return utils.getKeyTranslation(null);
-            ;
         };
 
         expect(noparam).toThrow();
@@ -26,6 +25,9 @@ describe('jasmine-node', function () {
         expect(utils.getKeyTranslation(utils.getStandardizedDateStr("1. ledna 2013"))).toEqual("1.1.2013");
         expect(utils.getKeyTranslation(utils.getStandardizedDateStr("1.   ledna   2013"))).toEqual("1.1.2013");
         expect(utils.getKeyTranslation(utils.getStandardizedDateStr("31.prosince 2013"))).toEqual("31.12.2013");
+
+        // no czech month name, date should not be modified
+        expect(utils.getKeyTranslation(utils.getStandardizedDateStr("31.12.2013"))).toEqual("31.12.2013");
        done();
     });
 });
