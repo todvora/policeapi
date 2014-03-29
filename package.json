@@ -1,40 +1,45 @@
 {
-  "name": "policeapi.cz",
-  "version": "1.0.0",
-  "description": "Unofficial API to the official Czech police database of stolen vehicles",
-  "keywords": [
-    "OpenShift",
-    "Node.js",
-    "application",
-    "openshift"
-  ],
-  "author": {
-    "name": "Tomas Dvorak",
-    "email": "todvora@gmail.com",
-    "url":  "http://www.tomas-dvorak/"
-  },
-  "homepage": "http://www.policeapi.cz/",
-  "repository": {
-    "type": "git",
-    "url": "https://gitub.com/openshift/crankcase"
-  },
+    "name": "policeapi.cz",
+    "version": "1.0.0",
+    "description": "Unofficial API to the official Czech police database of stolen vehicles",
+    "keywords": [
+        "API",
+        "stolen vehicles",
+        "Policie ČR"
+    ],
+    "author": {
+        "name": "Tomas Dvorak",
+        "email": "todvora@gmail.com",
+        "url": "http://www.tomas-dvorak/"
+    },
+    "homepage": "http://www.policeapi.cz/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/todvora/policeapi"
+    },
 
-  "engines": {
-    "node": ">= 0.10.4",
-    "npm": ">= 1.0.0"
-  },
+    "engines": {
+        "node": ">= 0.10.4",
+        "npm": ">= 1.0.0"
+    },
 
-  "dependencies": {
-    "express": "*",
-    "request": "*",
-    "cheerio": "*",
-    "easyxml": "*",
-    "mongodb": "*",
-    "mustache": "*"
-  },
-  "devDependencies": {},
-  "bundleDependencies": [],
+    "dependencies": {
+        "express": "*",
+        "request": "*",
+        "cheerio": "*",
+        "easyxml": "*",
+        "mongodb": "*",
+        "mustache": "*"
+    },
+    "devDependencies": {
+        "jasmine-node": ">= 1.0.26"
+    },
+    "bundleDependencies": [],
 
-  "private": true,
-  "main": "server.js"
+    "private": true,
+    "main": "server.js",
+
+    "scripts": {
+        "test": "jasmine-node spec --verbose"
+    }
 }

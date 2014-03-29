@@ -1,0 +1,6 @@
+/node_modules/
+
+# IntelliJ IDEA project files
+pcr.iml
+pcr.ipr
+pcr.iws
