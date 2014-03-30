@@ -4,7 +4,7 @@ var path = require("path");
 var policiecr = require("../../lib/policiecr");
 
 
-describe('jasmine-node', function () {
+describe(__filename, function () {
 
     var client = new policiecr.client();
 

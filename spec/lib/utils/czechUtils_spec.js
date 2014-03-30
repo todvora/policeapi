@@ -1,6 +1,6 @@
 var utils = require("../../../lib/utils/czechUtils");
 
-describe('jasmine-node', function () {
+describe(__filename, function () {
     it("should translate czech labels to english", function (done) {
         expect(utils.getKeyTranslation("vyrobce")).toEqual("manufacturer");
         expect(utils.getKeyTranslation("--unknownKey--")).toEqual("--unknownKey--");
